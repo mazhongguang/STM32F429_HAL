@@ -10,4 +10,5 @@ USER/DebugConfig/
 *.scvd
 *.ini
 JLinkLog.txt
+*.bak
 

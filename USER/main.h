@@ -8,6 +8,7 @@
 //#define KEY_H
 //#define EXTI_H
 #define LCD_H
+#define REMOTE_H
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
@@ -97,6 +98,10 @@
 
 #ifdef WKUP_H
 	#include "wkup.h"
+#endif
+
+#ifdef REMOTE_H
+	#include "remote.h"
 #endif
 
 #endif /* __MAIN_H */
