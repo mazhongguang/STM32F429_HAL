@@ -1,4 +1,5 @@
 #include "main.h"
+#include "GUI.h"
 int main()
 {
 	u8 key;
@@ -8,9 +9,18 @@ int main()
 	delay_init(180);								//初始化延时函数
 	uart_init(115200);								//初始化串口
 	LED_Init();										//初始化LED
-	LCD_Init();
-	Remote_Init();
+//	Remote_Init();
+	ili9341_init();	
+
+//	GUI_Init();
+//	GUI_SetBkColor(GUI_BLUE);
+//	GUI_SetColor(GUI_YELLOW);
+//	GUI_Clear();
+//	GUI_SetFont(GUI_Font24_ASCII);
+//	GUI_DispStringAt("HELLO WORLD ! \r\n", 20, 50);
 	
+	while(1);
+	#if 0
 	LCD_PWR=0;
 	POINT_COLOR=RED;
 	LCD_ShowString(0,0,192,32,32,"REMOTE TEST!");
@@ -19,16 +29,18 @@ int main()
 	
 	while(1)
 		{
-			key = Remote_Scan();
+//			key = Remote_Scan();
 			if (key)
 				{
 					LED_Green = 0;
 					LCD_ShowNum(145,108,key,3,32);
-					LCD_ShowNum(145,150,RmtCnt,3,32);
+					/* LCD_ShowNum(145,150,RmtCnt,3,32); */
 					LED_Green = 1;
 				}
 			else 
 				delay_ms(1000);
 			LED_White = !LED_White;
 		}
+		#endif
+
 }

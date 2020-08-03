@@ -256,7 +256,7 @@ void HAL_SRAM_MspInit(SRAM_HandleTypeDef *hsram)
         
 //初始化lcd
 //该初始化函数可以初始化各种型号的LCD(详见本.c文件最前面的描述)
-void LCD_Init(void)
+void ili9341_init(void)
 { 	  
 	GPIO_InitTypeDef GPIO_Initure;
 	FMC_NORSRAM_TimingTypeDef FMC_ReadWriteTim;

@@ -5,16 +5,15 @@
 条件编译 宏定义
 ******************************************************************************/
 #define LED_H
-//#define KEY_H
+#define KEY_H
 //#define EXTI_H
 #define LCD_H
-#define REMOTE_H
+//#define REMOTE_H
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
 #include "stdlib.h"
-
 
 /*******************个人包含头文件*******************************************/
 
@@ -36,7 +35,7 @@
 	
 #ifdef LCD_H
 	#include "font.h"
-	#include "lcd.h"
+	#include "ili9341.h"
 #endif
 
 #ifdef USMART_H
