@@ -13,3 +13,4 @@ JLinkLog.txt
 *.bak
 USER/Objects/
 .vscode/settings.json
+USER/Target 1.BAT

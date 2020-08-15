@@ -201,7 +201,8 @@ void LCD_Display_Dir(u8 dir)
 			lcddev.setxcmd=0X2B;
 			lcddev.setycmd=0X2A;
 		}
-	LCD_Scan_Dir(L2R_U2D);
+//	 LCD_Scan_Dir(L2R_U2D); 
+	LCD_Scan_Dir(R2L_U2D);
 }
 /******************************************************************************************************
 //设置窗口,并自动设置画点坐标到窗口左上角(sx,sy).
@@ -402,7 +403,7 @@ void ili9341_init(void)
 		delay_ms(120);
 		LCD_WR_REG(0x29); //display on
 		
-	LCD_Display_Dir(0);		//默认为竖屏
+	LCD_Display_Dir(1);		//默认为竖屏
 	LCD_LED=0;				//点亮背光
 	LCD_Clear(GBLUE);
 }  
@@ -426,13 +427,32 @@ void LCD_Clear(u32 color)
 void LCD_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u32 color)
 {          
 	u16 i,j;
-	u16 xlen=0; 
-	xlen=ex-sx+1;	 
-	for(i=sy;i<=ey;i++)
+	u16 xlen = 0, ylen = 0; 
+
+	/* 竖屏 */
+	if (lcddev.dir == 0)
 	{
-		LCD_SetCursor(sx,i);      				//设置光标位置 
-		LCD_WriteRAM_Prepare();     			//开始写入GRAM	  
-		for(j=0;j<xlen;j++)LCD->LCD_RAM=color;	//显示颜色 	    
+		xlen = ex - sx + 1;	
+		for(i=sy;i<=ey;i++)
+		{
+			LCD_SetCursor(sx,i);      				//设置光标位置 
+			LCD_WriteRAM_Prepare();     			//开始写入GRAM	  
+			for(j=0;j<xlen;j++)
+				LCD->LCD_RAM=color;	//显示颜色 	    
+		}
+	}
+	else           /* 横屏 */
+	{
+		ylen = ey - sy + 1;
+		for (i = sx; i <= ex; i++)
+		{
+			LCD_SetCursor(i, sy);
+			LCD_WriteRAM_Prepare();
+			for (j = 0; j < ylen; j++)
+			{
+				LCD->LCD_RAM = color;
+			}
+		}
 	}  
 }  
 //在指定区域内填充指定颜色块			 

@@ -1,8 +1,13 @@
-#include "main.h"
 #include "GUI.h"
+#include "WM.h"
+#include "main.h"
+#include "guidemo.h"
+#include "test.h"
+#include "timer.h"
+
 int main()
 {
-	u8 key;
+	u8 key = 9;
 	
 	HAL_Init();										//初始化HAL库
 	Stm32_Clock_Init(216,15,RCC_PLLP_DIV2,4);		//设置时钟180Mhz
@@ -10,15 +15,25 @@ int main()
 	uart_init(115200);								//初始化串口
 	LED_Init();										//初始化LED
 //	Remote_Init();
-	ili9341_init();	
-
-//	GUI_Init();
-//	GUI_SetBkColor(GUI_BLUE);
-//	GUI_SetColor(GUI_YELLOW);
-//	GUI_Clear();
-//	GUI_SetFont(GUI_Font24_ASCII);
-//	GUI_DispStringAt("HELLO WORLD ! \r\n", 20, 50);
+	ili9341_init();
+	TIM3_Init(999, 89);
 	
+	__HAL_RCC_CRC_CLK_ENABLE();
+	WM_SetCreateFlags(WM_CF_MEMDEV);
+	
+	GUI_Init();
+	GUI_SetBkColor(GUI_BLUE);
+	GUI_SetColor(GUI_YELLOW);
+	GUI_Clear();
+	GUI_SetFont(&GUI_Font24_ASCII);
+	GUI_DispStringAt("HELLO WORLD ! \r\n", 30, 50);
+	GUI_SetBkColor(GUI_GREEN);
+	GUI_ClearRect(50, 100, 100, 150);
+	GUI_DrawGradientH(120, 100, 300, 220,GUI_WHITE, GUI_RED);
+
+	WM_MULTIBUF_Enable(1);
+//	MainTask(); 
+	GUIDEMO_Main();
 	while(1);
 	#if 0
 	LCD_PWR=0;

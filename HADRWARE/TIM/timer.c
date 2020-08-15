@@ -1,4 +1,6 @@
 #include "main.h"
+
+extern __IO int32_t OS_TimeMS;
 TIM_HandleTypeDef TIM3_Handler;			//定时器句柄
 TIM_OC_InitTypeDef TIM3_CH2Handler;		//定时器3通道2句柄
 TIM_HandleTypeDef TIM2_CH1Handler;		//定时器2句柄
@@ -41,13 +43,14 @@ void TIM3_IRQHandler(void)
 	HAL_TIM_IRQHandler(&TIM3_Handler);
 }
 /**************** 回调函数，定时器中断服务函数调用 *********************************/
-//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim)
-//{
-//	if(htim==(&TIM3_Handler))
-//		{
-//			LED_White=!LED_White;        //LED1反转
-//		}
-//}
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim)
+{
+	if(htim==(&TIM3_Handler))
+		{
+			/* LED_White=!LED_White;        //LED1反转 */
+			OS_TimeMS++;
+		}
+}
 
 
 /***************************************************************************************************************************/
@@ -172,6 +175,7 @@ void TIM2_IRQHandler(void)
 中断处理回调函数，该函数在HAL_TIM_IRQHandler()中会被调用
 更新中断（溢出）发生时执行
 **************************************************************************************************/
+#if 0
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if((TIM2_CH1_CAPTURE_STA&0x80)==0)						//还未成功捕获
@@ -188,6 +192,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 				}
 		}
 }
+#endif
 /************************************************************************************************
 定时器输入捕获中断处理回调函数
 该函数在HAL_TIM_IRQHandler()中会被调用

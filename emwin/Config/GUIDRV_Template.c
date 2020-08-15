@@ -52,7 +52,11 @@ Purpose     : Template driver, could be used as starting point for new
 #include "LCD_Private.h"
 #include "GUI_Private.h"
 #include "LCD_ConfDefaults.h"
-#include "ili9341.H"
+#include "ili9341.h"
+
+//定义LCD的命令和数据位.
+u32 UCGUI_LCD_CMD  = 0X6007FFFE; //地址为0X6007FFFE; FMC_A18为0
+u32 UCGUI_LCD_DATA = 0X60080000; //地址为0X6C080000; FMC_A18为1
 /*********************************************************************
 *
 *       Defines
@@ -232,12 +236,12 @@ static void _FillRect(GUI_DEVICE * pDevice, int x0, int y0, int x1, int y1) {
       }
     }
   } else {
-    LCD_Fill(x0, y0, x1, y1, PixelIndex);
-    /* for (; y0 <= y1; y0++) {
+    LCD_Fill(x0, y0, x1, y1, LCD_COLORINDEX);
+    /*  for (; y0 <= y1; y0++) {
       for (x = x0; x <= x1; x++) {
         _SetPixelIndex(pDevice, x, y0, PixelIndex);
       }
-    } */
+    }  */
   }
 }
 
@@ -493,9 +497,9 @@ static void  _DrawBitLine8BPP(GUI_DEVICE * pDevice, int x, int y, U8 const GUI_U
 *   Only required for 16bpp color depth of target. Should be removed otherwise.
 */
 static void _DrawBitLine16BPP(GUI_DEVICE * pDevice, int x, int y, U16 const GUI_UNI_PTR * p, int xsize) {
-  /* for (;xsize > 0; xsize--, x++, p++) {
+  for (;xsize > 0; xsize--, x++, p++) {
     _SetPixelIndex(pDevice, x, y, *p);
-  } */
+  }
   LCD_PIXELINDEX pixel;
 //  if (lcdltdc.pwidth != 0)   /* RGB LCD */
 //  {
@@ -506,13 +510,13 @@ static void _DrawBitLine16BPP(GUI_DEVICE * pDevice, int x, int y, U16 const GUI_
 //  }
 //  else  /* MCU LCD */
   {
-//    LCD_SetCursor(x, y);
-//    *(__IO uint16_t *)(UCGUI_LCD_CMD) = lcddev.wramcmd;
-//    for (; xsize > 0; xsize--, x++, p++)
-//    {
-//      pixel = *p;
-//      *(__IO uint16_t *)(UCGUI_LCD_DATA) = pixel;
-//    } 
+    LCD_SetCursor(x, y);
+    *(__IO uint16_t *)(UCGUI_LCD_CMD) = lcddev.wramcmd;
+    for (; xsize > 0; xsize--, x++, p++)
+    {
+      pixel = *p;
+      *(__IO uint16_t *)(UCGUI_LCD_DATA) = pixel;
+    } 
   }
 }
 

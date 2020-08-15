@@ -3,17 +3,31 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/USER",
+                "${workspaceFolder}/HADRWARE/TIM",
+                "${workspaceFolder}/HADRWARE/LED",
+                "${workspaceFolder}/HADRWARE/KEY",
+                "${workspaceFolder}/HADRWARE/LCD",
+                "${workspaceFolder}/emwin/inc",
+                "${workspaceFolder}/emwin/Config",
+                "${workspaceFolder}/emwin/App",
+                "${workspaceFolder}/emwin/mytest",
+                "${workspaceFolder}/HALLIB/Inc",
+                "${workspaceFolder}/SYSTEM/sys",
+                "${workspaceFolder}/SYSTEM/delay",
+                "${workspaceFolder}/SYSTEM/usart"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "D:\\Program Files\\LLVM\\bin\\clang.exe",
+            "windowsSdkVersion": "10.0.18362.0",
+            "compilerPath": "D:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.27.29110/bin/Hostx64/x64/cl.exe",
             "cStandard": "c11",
-            "cppStandard": "c++11",
-            "intelliSenseMode": "clang-x64"
+            "cppStandard": "c++17",
+            "intelliSenseMode": "msvc-x64"
         }
     ],
     "version": 4
