@@ -201,8 +201,8 @@ void LCD_Display_Dir(u8 dir)
 			lcddev.setxcmd=0X2B;
 			lcddev.setycmd=0X2A;
 		}
-//	 LCD_Scan_Dir(L2R_U2D); 
-	LCD_Scan_Dir(R2L_U2D);
+	 LCD_Scan_Dir(L2R_U2D); 		/* 竖屏 */
+//	LCD_Scan_Dir(R2L_U2D);		/* 横屏 */
 }
 /******************************************************************************************************
 //设置窗口,并自动设置画点坐标到窗口左上角(sx,sy).
@@ -403,7 +403,7 @@ void ili9341_init(void)
 		delay_ms(120);
 		LCD_WR_REG(0x29); //display on
 		
-	LCD_Display_Dir(1);		//默认为竖屏
+	LCD_Display_Dir(0);		//默认为竖屏
 	LCD_LED=0;				//点亮背光
 	LCD_Clear(GBLUE);
 }  
