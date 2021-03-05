@@ -1,15 +1,8 @@
 OUTPUT/
 SourceInsight/
-keilkilll.bat
 USER/Listings/
 USER/DebugConfig/
-*.MZG
-*.NS-mzg
-*.uvoptx
-*.uvprojx
 *.scvd
-*.ini
-JLinkLog.txt
 *.bak
 USER/Objects/
 .vscode/settings.json
