@@ -1,6 +1,6 @@
 #include "main.h"
 
-extern __IO int32_t OS_TimeMS;
+//extern __IO int32_t OS_TimeMS;
 TIM_HandleTypeDef TIM3_Handler;			//定时器句柄
 TIM_OC_InitTypeDef TIM3_CH2Handler;		//定时器3通道2句柄
 TIM_HandleTypeDef TIM2_CH1Handler;		//定时器2句柄
@@ -48,7 +48,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim)
 	if(htim==(&TIM3_Handler))
 		{
 			/* LED_White=!LED_White;        //LED1反转 */
-			OS_TimeMS++;
+//			OS_TimeMS++;
 		}
 }
 
