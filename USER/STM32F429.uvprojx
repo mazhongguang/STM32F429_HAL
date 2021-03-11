@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F429xx,USE_HAL_DRIVER,ARM_MATH_CM4,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\HADRWARE\KEY;..\HALLIB\Inc;..\HALLIB\Inc\Legacy;..\MALLOC;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HADRWARE\LCD;..\HADRWARE\LED;..\USER;..\emwin\Config;..\emwin\inc;..\emwin\App;..\emwin\mytest;..\HADRWARE\TIM</IncludePath>
+              <IncludePath>..\CORE;..\HALLIB\Inc;..\HALLIB\Inc\Legacy;..\MALLOC;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\emwin\Config;..\emwin\inc;..\emwin\App;..\emwin\mytest;..\HARDWARE\LCD;..\HARDWARE\LED;..\HARDWARE\sdio;..\HARDWARE\KEY;..\HARDWARE\TIM</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -447,6 +447,16 @@
               <FileType>1</FileType>
               <FilePath>..\HALLIB\Src\stm32f4xx_hal_tim_ex.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_hal_sd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HALLIB\Src\stm32f4xx_hal_sd.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_ll_sdmmc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HALLIB\Src\stm32f4xx_ll_sdmmc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -463,29 +473,34 @@
           <GroupName>hardware</GroupName>
           <Files>
             <File>
-              <FileName>LED.c</FileName>
+              <FileName>KEY.C</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HADRWARE\LED\LED.c</FilePath>
-            </File>
-            <File>
-              <FileName>font.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HADRWARE\LCD\font.c</FilePath>
+              <FilePath>..\HARDWARE\KEY\KEY.C</FilePath>
             </File>
             <File>
               <FileName>ILI9341.C</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HADRWARE\LCD\ILI9341.C</FilePath>
+              <FilePath>..\HARDWARE\LCD\ILI9341.C</FilePath>
             </File>
             <File>
-              <FileName>KEY.C</FileName>
+              <FileName>font.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HADRWARE\KEY\KEY.C</FilePath>
+              <FilePath>..\HARDWARE\LCD\font.c</FilePath>
+            </File>
+            <File>
+              <FileName>LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\LED\LED.c</FilePath>
             </File>
             <File>
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\HADRWARE\TIM\timer.c</FilePath>
+              <FilePath>..\HARDWARE\TIM\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdio_sdcard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\sdio\sdio_sdcard.c</FilePath>
             </File>
           </Files>
         </Group>
