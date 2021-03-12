@@ -4,6 +4,8 @@
 #include "sdio_sdcard.h"
 #include "stm32f4xx_hal_sd.h"
 #include "timer.h"
+#include <stdint.h>
+#include "malloc.h"
 
 void show_sdcard_info(void)
 {
@@ -30,15 +32,40 @@ void show_sdcard_info(void)
 			break;
 	}
 
-	LCD_ShowString(0, 220, 144, 16, 26, "manuid");
-	LCD_ShowNum(48, 220, SDCardInfo.BlockSize, 8, 16);
-	LCD_ShowNum(0, 236, SDCARD_Handler.SdCard.BlockNbr, 8, 16);
-	LCD_ShowNum(64, 252, SDCardInfo.BlockSize, 8, 16);
-	LCD_ShowNum(0, 252, SDCARD_Handler.SdCard.BlockNbr, 8, 16);
+	/*LCD_ShowString(0, 220, 144, 16, 26, "manuid");*/
+	/*LCD_ShowNum(48, 220, SDCardInfo.BlockSize, 8, 16);*/
+	/*LCD_ShowNum(0, 236, SDCARD_Handler.SdCard.BlockNbr, 8, 16);*/
+	/*LCD_ShowNum(64, 252, SDCardInfo.BlockSize, 8, 16);*/
+	/*LCD_ShowNum(0, 252, SDCARD_Handler.SdCard.BlockNbr, 8, 16);*/
 	printf("sd block = %d \r\n", SDCARD_Handler.SdCard.BlockNbr);
 	printf("sd block size = %d \r\n", SDCARD_Handler.SdCard.BlockSize);
 	uint64_t temp = ((uint64_t)SDCARD_Handler.SdCard.BlockNbr * SDCARD_Handler.SdCard.BlockSize) >> 30;
-	printf("sd size = %d \r\nMB", (uint32_t)temp);
+	printf("sd size = %d GB", (uint32_t)temp);
+}
+
+void sd_test_read(uint32_t secaddr, uint32_t seccnt)
+{
+	uint32_t i;
+	uint8_t buf[seccnt * 512];
+	uint8_t	sta = 0;
+
+//	buf = mymalloc(SRAMEX, seccnt * 512);
+	sta = sd_readdisk(buf, secaddr, seccnt);
+	if (sta == 0)
+	{
+		printf("sector %d data:\r\n", secaddr);
+		for (i = 0; i < 512 * seccnt; i++)
+		{
+			printf("%x ", buf[i]);
+		}
+		printf("\r\ndata ended\r\n");
+	}
+	else
+	{
+		printf("error:%d\r\n", sta);
+	}
+
+//	myfree(SRAMEX, buf);
 }
 
 
@@ -76,6 +103,7 @@ int main()
 	}
 	printf("sd card info \r\n");
 	show_sdcard_info();
+	sd_test_read(512, 1);
 	LCD_ShowString(0, 268, 144, 16, 16,"sdcard size :    MB");
 	LCD_ShowNum(104, 268, (SDCARD_Handler.SdCard.BlockSize * SDCARD_Handler.SdCard.BlockNbr) >> 20, 4, 16);
 	LCD_ShowNum(104, 284, (SDCARD_Handler.SdCard.LogBlockSize * SDCARD_Handler.SdCard.LogBlockNbr) >> 20, 4, 16);

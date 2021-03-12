@@ -104,19 +104,19 @@ uint8_t sd_readdisk(uint8_t *buf, uint32_t sector, uint32_t cnt)
 
 	lsector <<= 9;
 	INTX_DISABLE();
-	if ((uint32_t)buf % 4 != 0)
-	{
-		for (n = 0; n < cnt; n++)
-		{
-			sta = HAL_SD_ReadBlocks(&SDCARD_Handler, sdio_data_buffer, lsector + (512 * n), 1, SD_TIMEOUT); 
-			memcpy(buf, sdio_data_buffer, 512);
-			buf += 512;
-		}
-	}
-	else
-	{
+//	if ((uint32_t)buf % 4 != 0)
+//	{
+//		for (n = 0; n < cnt; n++)
+//		{
+//			sta = HAL_SD_ReadBlocks(&SDCARD_Handler, sdio_data_buffer, lsector + (512 * n), 1, SD_TIMEOUT); 
+//			memcpy(buf, sdio_data_buffer, 512);
+//			buf += 512;
+//		}
+//	}
+//	else
+//	{
 		sta = HAL_SD_ReadBlocks(&SDCARD_Handler, buf, lsector, cnt, SD_TIMEOUT);
-	}
+//	}
 	INTX_ENABLE();
 	
 	return sta;

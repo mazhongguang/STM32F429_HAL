@@ -35,7 +35,7 @@ MEM1内存参数设定，MEM1完全处于内部SRAM里
 #define	MEM3_ALLOC_TABLE_SIZE				MEM3_MAX_SIZE/MEM3_BLOCK_SIZE		//内存表大小
 
 /*************************  内存管理控制器		    ***************************************************/
-struct_m_malloc_dev
+struct _m_malloc_dev
 {
 	void (*init)(u8);									//初始化
 	u16	(*perused)(u8);									//内存使用率
@@ -43,7 +43,7 @@ struct_m_malloc_dev
 	u32	*memmap[SRAMBANK];								//内存管理状态表
 	u8 memrdy[SRAMBANK];								//内存管理是否就绪
 };
-extern struct_m_malloc_dev	mallco_dev;					//在mallco.c里面定义
+extern struct _m_malloc_dev	malloc_dev;					//在mallco.c里面定义
 
 void mymemset(void *s,u8 c,u32 count);								//设置内存
 void mymemcpy(void *des,void *src,u32 n);							//复制内存
