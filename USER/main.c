@@ -11,8 +11,10 @@ void show_sdcard_info(void)
 	{
 		case CARD_SDSC:
 			LCD_ShowString(0, 182, 144, 32, 32, "card type SDSC V");
+		printf("card type SDSC \r\n");
 			break;
 		case CARD_SDHC_SDXC:
+			printf("card type SDXC \r\n");
 			LCD_ShowString(0, 182, 144, 32, 32, "card type SDXC V");
 			break;
 	}
@@ -20,8 +22,10 @@ void show_sdcard_info(void)
 	{
 		case CARD_V1_X:
 			LCD_ShowString(256, 182, 48, 32, 32, "1.0");
+		printf("V 1.0\r\n");
 			break;
 		case CARD_V2_X:
+					printf("V 2.0\r\n");
 			LCD_ShowString(256, 182, 48, 32, 32, "2.0");
 			break;
 	}
@@ -31,6 +35,10 @@ void show_sdcard_info(void)
 	LCD_ShowNum(0, 236, SDCARD_Handler.SdCard.BlockNbr, 8, 16);
 	LCD_ShowNum(64, 252, SDCardInfo.BlockSize, 8, 16);
 	LCD_ShowNum(0, 252, SDCARD_Handler.SdCard.BlockNbr, 8, 16);
+	printf("sd block = %d \r\n", SDCARD_Handler.SdCard.BlockNbr);
+	printf("sd block size = %d \r\n", SDCARD_Handler.SdCard.BlockSize);
+	uint64_t temp = ((uint64_t)SDCARD_Handler.SdCard.BlockNbr * SDCARD_Handler.SdCard.BlockSize) >> 30;
+	printf("sd size = %d \r\nMB", (uint32_t)temp);
 }
 
 
@@ -60,10 +68,13 @@ int main()
 	while (sd_init())
 	{
 		LCD_ShowString(0, 220, 144, 32, 32, "sd card error!");
+		printf("sd card error\r\n");
 		delay_ms(500);
 		LCD_ShowString(0, 220, 144, 32, 32, "please check!");
+		printf("please check\r\n");
 		delay_ms(500);
 	}
+	printf("sd card info \r\n");
 	show_sdcard_info();
 	LCD_ShowString(0, 268, 144, 16, 16,"sdcard size :    MB");
 	LCD_ShowNum(104, 268, (SDCARD_Handler.SdCard.BlockSize * SDCARD_Handler.SdCard.BlockNbr) >> 20, 4, 16);

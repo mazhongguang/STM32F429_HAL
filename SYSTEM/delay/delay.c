@@ -186,3 +186,8 @@ void delay_ms(u16 nms)
 	if(remain)delay_xms(remain);
 } 
 #endif
+
+void HAL_Delay(uint32_t Delay)
+{
+	delay_ms(Delay);
+}
