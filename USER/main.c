@@ -9,18 +9,18 @@
 
 void show_sdcard_info(void)
 {
-	switch (SDCardInfo.CardType)
+	switch (SDCARD_Handler.SdCard.CardType)
 	{
 		case CARD_SDSC:
 			LCD_ShowString(0, 182, 144, 32, 32, "card type SDSC V");
 		printf("card type SDSC \r\n");
 			break;
 		case CARD_SDHC_SDXC:
-			printf("card type SDXC \r\n");
+			printf("card type SDHC \r\n");
 			LCD_ShowString(0, 182, 144, 32, 32, "card type SDXC V");
 			break;
 	}
-	switch (SDCardInfo.CardVersion)
+	switch (SDCARD_Handler.SdCard.CardVersion)
 	{
 		case CARD_V1_X:
 			LCD_ShowString(256, 182, 48, 32, 32, "1.0");
@@ -37,20 +37,22 @@ void show_sdcard_info(void)
 	/*LCD_ShowNum(0, 236, SDCARD_Handler.SdCard.BlockNbr, 8, 16);*/
 	/*LCD_ShowNum(64, 252, SDCardInfo.BlockSize, 8, 16);*/
 	/*LCD_ShowNum(0, 252, SDCARD_Handler.SdCard.BlockNbr, 8, 16);*/
+	
 	printf("sd block = %d \r\n", SDCARD_Handler.SdCard.BlockNbr);
 	printf("sd block size = %d \r\n", SDCARD_Handler.SdCard.BlockSize);
 	uint64_t temp = ((uint64_t)SDCARD_Handler.SdCard.BlockNbr * SDCARD_Handler.SdCard.BlockSize) >> 30;
-	printf("sd size = %d GB", (uint32_t)temp);
+	printf("sd size = %d GB\r\n", (uint32_t)temp);
 }
 
 void sd_test_read(uint32_t secaddr, uint32_t seccnt)
 {
 	uint32_t i;
-	uint8_t buf[seccnt * 512];
+	uint8_t buf[512];
 	uint8_t	sta = 0;
 
 //	buf = mymalloc(SRAMEX, seccnt * 512);
 	sta = sd_readdisk(buf, secaddr, seccnt);
+	
 	if (sta == 0)
 	{
 		printf("sector %d data:\r\n", secaddr);
@@ -103,7 +105,7 @@ int main()
 	}
 	printf("sd card info \r\n");
 	show_sdcard_info();
-	sd_test_read(512, 1);
+	sd_test_read(0, 1);
 	LCD_ShowString(0, 268, 144, 16, 16,"sdcard size :    MB");
 	LCD_ShowNum(104, 268, (SDCARD_Handler.SdCard.BlockSize * SDCARD_Handler.SdCard.BlockNbr) >> 20, 4, 16);
 	LCD_ShowNum(104, 284, (SDCARD_Handler.SdCard.LogBlockSize * SDCARD_Handler.SdCard.LogBlockNbr) >> 20, 4, 16);

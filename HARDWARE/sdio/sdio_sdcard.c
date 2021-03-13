@@ -99,24 +99,32 @@ uint8_t sd_getcardinfo(HAL_SD_CardInfoTypeDef *cardinfo)
 uint8_t sd_readdisk(uint8_t *buf, uint32_t sector, uint32_t cnt)
 {
 	uint8_t sta = HAL_OK;
-	long long lsector = sector;
 	uint8_t n;
+	uint32_t timeout = SD_TIMEOUT;
+	uint64_t lsector = sector;
 
-	lsector <<= 9;
 	INTX_DISABLE();
-//	if ((uint32_t)buf % 4 != 0)
-//	{
-//		for (n = 0; n < cnt; n++)
-//		{
-//			sta = HAL_SD_ReadBlocks(&SDCARD_Handler, sdio_data_buffer, lsector + (512 * n), 1, SD_TIMEOUT); 
-//			memcpy(buf, sdio_data_buffer, 512);
-//			buf += 512;
-//		}
-//	}
-//	else
-//	{
-		sta = HAL_SD_ReadBlocks(&SDCARD_Handler, buf, lsector, cnt, SD_TIMEOUT);
-//	}
+	if ((uint32_t)buf % 4 != 0)
+	{
+		for (n = 0; n < cnt; n++)
+		{
+			sta = HAL_SD_ReadBlocks(&SDCARD_Handler, sdio_data_buffer, lsector + (512 * n), 1, timeout); 
+			memcpy(buf, sdio_data_buffer, 512);
+			buf += 512;
+		}
+	}
+	else
+	{
+		sta = HAL_SD_ReadBlocks(&SDCARD_Handler, buf, lsector, cnt, timeout);
+	}
+
+	while (HAL_SD_GetCardState(&SDCARD_Handler) != HAL_SD_CARD_TRANSFER)
+	{
+		if (timeout-- == 0)
+		{
+			sta = HAL_SD_STATE_BUSY;
+		}
+	}
 	INTX_ENABLE();
 	
 	return sta;
@@ -133,23 +141,31 @@ uint8_t sd_readdisk(uint8_t *buf, uint32_t sector, uint32_t cnt)
 uint8_t sd_writedisk(uint8_t *buf, uint32_t sector, uint32_t cnt)
 {
 	uint8_t sta = HAL_OK;
-	long long lsector = sector;
 	uint8_t n;
+	uint32_t timeout = SD_TIMEOUT;
+	uint64_t lsector = sector;
 
-	lsector <<= 9;
 	INTX_DISABLE();
 	if ((uint32_t)buf % 4 != 0)
 	{
 		for (n = 0; n < cnt; n++)
 		{
 			memcpy(sdio_data_buffer, buf, 512);
-			sta = HAL_SD_WriteBlocks(&SDCARD_Handler, sdio_data_buffer, lsector + (512 * n), 1, SD_TIMEOUT);
+			sta = HAL_SD_WriteBlocks(&SDCARD_Handler, sdio_data_buffer, lsector + (512 * n), 1, timeout);
 			buf += 512;
 		}
 	}
 	else
 	{
-		sta = HAL_SD_WriteBlocks(&SDCARD_Handler, sdio_data_buffer, lsector, cnt, SD_TIMEOUT);
+		sta = HAL_SD_WriteBlocks(&SDCARD_Handler, sdio_data_buffer, lsector, cnt, timeout);
+	}
+
+	while (HAL_SD_GetCardState(&SDCARD_Handler) != HAL_SD_CARD_TRANSFER)
+	{
+		if (timeout-- == 0)
+		{
+			sta = HAL_SD_STATE_BUSY;
+		}
 	}
 	INTX_DISABLE();
 
