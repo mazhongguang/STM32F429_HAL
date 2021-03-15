@@ -76,7 +76,7 @@ void sd_test_read(uint32_t secaddr, uint32_t seccnt)
 int main()
 {
 	u8 key = 9;
-	FATFS fatfs;
+	FATFS *fatfs;
 	FIL file;
 	FRESULT f_result;
 	char line[100];
@@ -112,9 +112,15 @@ int main()
 	printf("sd card info \r\n");
 	show_sdcard_info();
 
+	fatfs = mymalloc(SRAMIN, sizeof(FATFS));
+	printf("fatfs addr = %#x \r\n", fatfs);
 	
-	f_mount(&fatfs , "", 0);
+	f_result=f_mount(fatfs , "0:", 1);
+	printf("result = %d \r\n", f_result);
+//	f_result = f_open(&file,"0:/123.TXT",FA_CREATE_NEW | FA_WRITE);
+//	printf("result = %d \r\n", f_result);
 	f_result = f_open(&file, "test.txt", FA_READ);
+	printf("result = %d \r\n", f_result);
 	while (f_gets(line, sizeof(line), &file))
 	{
 		printf(line);

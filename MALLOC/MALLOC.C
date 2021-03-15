@@ -177,7 +177,7 @@ uint8_t my_mem_free(uint8_t memx, uint32_t offset)
 	if (offset < memsize[memx])
 	{
 		int index = offset / memblksize[memx];	/* 偏移所在内存块号*/
-		int nmemb = my_mem_malloc.memmap[memx][index]; /* 内存块数量 */
+		int nmemb = malloc_dev.memmap[memx][index]; /* 内存块数量 */
 		/* 内存块清零 */
 		for (i = 0; i < nmemb; i++)
 		{
