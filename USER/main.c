@@ -5,7 +5,9 @@
 #include "stm32f4xx_hal_sd.h"
 #include "timer.h"
 #include <stdint.h>
+#include <stdio.h>
 #include "malloc.h"
+#include "ff.h"
 
 void show_sdcard_info(void)
 {
@@ -74,6 +76,10 @@ void sd_test_read(uint32_t secaddr, uint32_t seccnt)
 int main()
 {
 	u8 key = 9;
+	FATFS fatfs;
+	FIL file;
+	FRESULT f_result;
+	char line[100];
 	
 	HAL_Init();										//初始化HAL库
 	Stm32_Clock_Init(216,15,RCC_PLLP_DIV2,4);		//设置时钟180Mhz
@@ -105,7 +111,16 @@ int main()
 	}
 	printf("sd card info \r\n");
 	show_sdcard_info();
-	sd_test_read(0, 1);
+
+	
+	f_mount(&fatfs , "", 0);
+	f_result = f_open(&file, "test.txt", FA_READ);
+	while (f_gets(line, sizeof(line), &file))
+	{
+		printf(line);
+	}
+	f_close(&file);
+	/*sd_test_read(0, 1);*/
 	LCD_ShowString(0, 268, 144, 16, 16,"sdcard size :    MB");
 	LCD_ShowNum(104, 268, (SDCARD_Handler.SdCard.BlockSize * SDCARD_Handler.SdCard.BlockNbr) >> 20, 4, 16);
 	LCD_ShowNum(104, 284, (SDCARD_Handler.SdCard.LogBlockSize * SDCARD_Handler.SdCard.LogBlockNbr) >> 20, 4, 16);

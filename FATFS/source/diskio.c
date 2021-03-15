@@ -10,12 +10,14 @@
 #include "ff.h"			/* Obtains integer types */
 #include "diskio.h"		/* Declarations of disk functions */
 
+#include "sdio_sdcard.h"
+
 /* Definitions of physical drive number for each drive */
 #define DEV_RAM		0	/* Example: Map Ramdisk to physical drive 0 */
 #define DEV_MMC		1	/* Example: Map MMC/SD card to physical drive 1 */
 #define DEV_USB		2	/* Example: Map USB MSD to physical drive 2 */
 
-#define SD_CARD 0
+#define SD_CARD 3
 
 
 /*-----------------------------------------------------------------------*/
@@ -31,24 +33,27 @@ DSTATUS disk_status (
 
 	switch (pdrv) {
 	case DEV_RAM :
-		result = RAM_disk_status();
+		/*result = RAM_disk_status();*/
 
 		// translate the reslut code here
 
 		return stat;
 
 	case DEV_MMC :
-		result = MMC_disk_status();
+		/*result = MMC_disk_status();*/
 
 		// translate the reslut code here
 
 		return stat;
 
 	case DEV_USB :
-		result = USB_disk_status();
+		/*result = USB_disk_status();*/
 
 		// translate the reslut code here
 
+		return stat;
+	case SD_CARD:
+		result = 0;
 		return stat;
 	}
 	return STA_NOINIT;
@@ -69,25 +74,28 @@ DSTATUS disk_initialize (
 
 	switch (pdrv) {
 	case DEV_RAM :
-		result = RAM_disk_initialize();
+		/*result = RAM_disk_initialize();*/
 
 		// translate the reslut code here
 
 		return stat;
 
 	case DEV_MMC :
-		result = MMC_disk_initialize();
+		/*result = MMC_disk_initialize();*/
 
 		// translate the reslut code here
 
 		return stat;
 
 	case DEV_USB :
-		result = USB_disk_initialize();
+		/*result = USB_disk_initialize();*/
 
 		// translate the reslut code here
 
 		return stat;
+	case SD_CARD:
+		result = sd_init();
+		return result;
 	}
 	return STA_NOINIT;
 }
@@ -105,14 +113,19 @@ DRESULT disk_read (
 	UINT count		/* Number of sectors to read */
 )
 {
-	DRESULT res;
+	DRESULT res = 0;
 	int result;
+
+	if (count == 0)
+	{
+		return RES_PARERR;
+	}
 
 	switch (pdrv) {
 	case DEV_RAM :
 		// translate the arguments here
 
-		result = RAM_disk_read(buff, sector, count);
+		/*result = RAM_disk_read(buff, sector, count);*/
 
 		// translate the reslut code here
 
@@ -121,7 +134,7 @@ DRESULT disk_read (
 	case DEV_MMC :
 		// translate the arguments here
 
-		result = MMC_disk_read(buff, sector, count);
+		/*result = MMC_disk_read(buff, sector, count);*/
 
 		// translate the reslut code here
 
@@ -130,10 +143,19 @@ DRESULT disk_read (
 	case DEV_USB :
 		// translate the arguments here
 
-		result = USB_disk_read(buff, sector, count);
+		/*result = USB_disk_read(buff, sector, count);*/
 
 		// translate the reslut code here
 
+		return res;
+		
+	case SD_CARD:
+		res  = sd_readdisk(buff, sector, count);
+		while (res != 0)
+		{
+			sd_init();
+			res = sd_readdisk(buff, sector, count);
+		}
 		return res;
 	}
 
@@ -155,14 +177,19 @@ DRESULT disk_write (
 	UINT count			/* Number of sectors to write */
 )
 {
-	DRESULT res;
+	DRESULT res = 0;
 	int result;
+
+	if (count == 0)
+	{
+		return RES_PARERR;
+	}
 
 	switch (pdrv) {
 	case DEV_RAM :
 		// translate the arguments here
 
-		result = RAM_disk_write(buff, sector, count);
+		/*result = RAM_disk_write(buff, sector, count);*/
 
 		// translate the reslut code here
 
@@ -171,7 +198,7 @@ DRESULT disk_write (
 	case DEV_MMC :
 		// translate the arguments here
 
-		result = MMC_disk_write(buff, sector, count);
+		/*result = MMC_disk_write(buff, sector, count);*/
 
 		// translate the reslut code here
 
@@ -180,10 +207,19 @@ DRESULT disk_write (
 	case DEV_USB :
 		// translate the arguments here
 
-		result = USB_disk_write(buff, sector, count);
+		/*result = USB_disk_write(buff, sector, count);*/
 
 		// translate the reslut code here
 
+		return res;
+		
+	case SD_CARD:
+		res = sd_writedisk((uint8_t *)buff, sector, count);
+		while (res != 0)
+		{
+			sd_init();
+			res = sd_writedisk((uint8_t *)buff, sector, count);
+		}
 		return res;
 	}
 
@@ -203,7 +239,7 @@ DRESULT disk_ioctl (
 	void *buff		/* Buffer to send/receive control data */
 )
 {
-	DRESULT res;
+	DRESULT res = 0;
 	int result;
 
 	switch (pdrv) {
@@ -224,8 +260,34 @@ DRESULT disk_ioctl (
 		// Process of the command the USB drive
 
 		return res;
+
+	case SD_CARD:
+		switch (cmd)
+		{
+			case CTRL_SYNC:
+				return RES_OK;
+			case GET_SECTOR_SIZE:
+				*(DWORD *)buff = 512;
+				return RES_OK;
+			case GET_BLOCK_SIZE:
+				*(WORD *)buff = SDCARD_Handler.SdCard.BlockSize;
+				return RES_OK;
+			case GET_SECTOR_COUNT:
+				*(DWORD *)buff = SDCARD_Handler.SdCard.BlockNbr;
+				return RES_OK;
+			default:
+				return RES_PARERR;
+		}
 	}
 
 	return RES_PARERR;
 }
 
+// get current time
+/*User defined function to give a current time to fatfs module      */
+/*31-25: Year(0-127 org.1980), 24-21: Month(1-12), 20-16: Day(1-31) */                                                                                                                                                                                                                                          
+/*15-11: Hour(0-23), 10-5: Minute(0-59), 4-0: Second(0-29 *2) */                                                                                                                                                                                                                                                
+DWORD get_fattime (void)
+{				 
+	return 0;
+}

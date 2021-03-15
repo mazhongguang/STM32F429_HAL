@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F429xx,USE_HAL_DRIVER,ARM_MATH_CM4,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\HALLIB\Inc;..\HALLIB\Inc\Legacy;..\MALLOC;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\emwin\Config;..\emwin\inc;..\emwin\App;..\emwin\mytest;..\HARDWARE\LCD;..\HARDWARE\LED;..\HARDWARE\sdio;..\HARDWARE\KEY;..\HARDWARE\TIM;..\MALLOC</IncludePath>
+              <IncludePath>..\CORE;..\HALLIB\Inc;..\HALLIB\Inc\Legacy;..\MALLOC;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\emwin\Config;..\emwin\inc;..\emwin\App;..\emwin\mytest;..\HARDWARE\LCD;..\HARDWARE\LED;..\HARDWARE\sdio;..\HARDWARE\KEY;..\HARDWARE\TIM;..\MALLOC;..\FATFS\source;..\MALLOC</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -546,6 +546,41 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>FATFS</GroupName>
+          <Files>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FATFS\source\diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FATFS\source\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>ffsystem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FATFS\source\ffsystem.c</FilePath>
+            </File>
+            <File>
+              <FileName>ffunicode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FATFS\source\ffunicode.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>malloc</GroupName>
+          <Files>
+            <File>
+              <FileName>MALLOC.C</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MALLOC\MALLOC.C</FilePath>
             </File>
           </Files>
         </Group>
