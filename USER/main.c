@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "malloc.h"
 #include "ff.h"
+#include "SDRAM.H"
 
 void show_sdcard_info(void)
 {
@@ -46,14 +47,42 @@ void show_sdcard_info(void)
 	printf("sd size = %d GB\r\n", (uint32_t)temp);
 }
 
+void sd_test_write(uint32_t secaddr, uint32_t seccnt)
+{
+	uint32_t i;
+	uint8_t *buf;
+	uint8_t sta = 0;
+	buf = mymalloc(SRAMEX, seccnt * 512);
+	for (i = 0; i < seccnt * 512; i++);
+	{
+		buf[i] = 0xFF;
+	}
+	sta = sd_writedisk(buf, secaddr, seccnt);
+	if (sta == 0)
+	{
+		printf("write over!\r\n");
+	}
+	else
+	{
+		printf("err:%d\r\n", sta);
+	}
+	myfree(SRAMEX, buf);
+}
+
 void sd_test_read(uint32_t secaddr, uint32_t seccnt)
 {
 	uint32_t i;
-	uint8_t buf[512];
+	uint8_t *buf;
+//	uint8_t buf[512] = {0};
 	uint8_t	sta = 0;
-
-//	buf = mymalloc(SRAMEX, seccnt * 512);
+	buf = mymalloc(SRAMEX, seccnt * 512);
+	
+	for (uint16_t j = 0; j < seccnt * 512; j++)
+	{
+		buf[j] = 0;
+	}
 	sta = sd_readdisk(buf, secaddr, seccnt);
+//	sta = sd_readdisk(buf, 0, 1);
 	
 	if (sta == 0)
 	{
@@ -69,17 +98,18 @@ void sd_test_read(uint32_t secaddr, uint32_t seccnt)
 		printf("error:%d\r\n", sta);
 	}
 
-//	myfree(SRAMEX, buf);
+	myfree(SRAMEX, buf);
 }
 
 
 int main()
 {
 	u8 key = 9;
-	FATFS *fatfs;
+	FATFS fatfs;
 	FIL file;
 	FRESULT f_result;
 	char line[100];
+	UINT br, bw;
 	
 	HAL_Init();										//初始化HAL库
 	Stm32_Clock_Init(216,15,RCC_PLLP_DIV2,4);		//设置时钟180Mhz
@@ -89,6 +119,9 @@ int main()
 //	Remote_Init();
 	ili9341_init();
 	TIM3_Init(999, 89);
+	SDRAM_Init();
+	My_Mem_Init(SRAMIN);
+	My_Mem_Init(SRAMEX);
 	
 	__HAL_RCC_CRC_CLK_ENABLE();
 
@@ -112,21 +145,37 @@ int main()
 	printf("sd card info \r\n");
 	show_sdcard_info();
 
-	fatfs = mymalloc(SRAMIN, sizeof(FATFS));
-	printf("fatfs addr = %#x \r\n", fatfs);
+	printf("fatfs addr = %#x \r\n", &fatfs);
+//	sd_test_write(512, 1);
+//		sd_test_read(512, 1);
+BYTE work[FF_MAX_SS];
+
+	f_result=f_mount(&fatfs , "0:", 0);
+	printf("f_mount result = %d \r\n", f_result);
+
+	f_showfree("0:");
+	f_scan_files("0:");
+
+	/*f_result = f_mkdir("test123");*/
+	/*printf("f_mkdir result = %d \r\n", f_result);*/
 	
-	f_result=f_mount(fatfs , "0:", 1);
-	printf("result = %d \r\n", f_result);
-//	f_result = f_open(&file,"0:/123.TXT",FA_CREATE_NEW | FA_WRITE);
-//	printf("result = %d \r\n", f_result);
-	f_result = f_open(&file, "test.txt", FA_READ);
-	printf("result = %d \r\n", f_result);
-	while (f_gets(line, sizeof(line), &file))
-	{
-		printf(line);
-	}
-	f_close(&file);
-	/*sd_test_read(0, 1);*/
+	/* 读取并逐行显示数据 */
+//	f_result = f_open(&file, ".gitignore", FA_READ);
+	//	while (f_gets(line, sizeof(line), &file))
+//	{
+//		printf(line);
+//		printf("\r\n");
+//	}
+	
+	f_result = f_open(&file, "0:file.bin", FA_WRITE | FA_CREATE_ALWAYS);
+	printf("F_OPEN result = %d \r\n", f_result);
+	f_result = f_printf(&file, "123\r\n %d\r\n", 108279);
+//	f_result = f_write(&file, "test111", sizeof("test111"), &bw);
+	printf("f_write result = %d \r\n");
+
+	f_result = f_close(&file);
+	printf("F_close result = %d \r\n", f_result);
+	f_mount(0, "0:", 0);
 	LCD_ShowString(0, 268, 144, 16, 16,"sdcard size :    MB");
 	LCD_ShowNum(104, 268, (SDCARD_Handler.SdCard.BlockSize * SDCARD_Handler.SdCard.BlockNbr) >> 20, 4, 16);
 	LCD_ShowNum(104, 284, (SDCARD_Handler.SdCard.LogBlockSize * SDCARD_Handler.SdCard.LogBlockNbr) >> 20, 4, 16);

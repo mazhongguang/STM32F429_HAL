@@ -10,7 +10,7 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060960::V5.06 update 7 (build 960)::.\ARMCC</pCCUsed>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -185,7 +185,6 @@
             <uocXRam>0</uocXRam>
             <RvdsVP>2</RvdsVP>
             <RvdsMve>0</RvdsMve>
-            <RvdsCdeCp>0</RvdsCdeCp>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -339,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F429xx,USE_HAL_DRIVER,ARM_MATH_CM4,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\HALLIB\Inc;..\HALLIB\Inc\Legacy;..\MALLOC;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\emwin\Config;..\emwin\inc;..\emwin\App;..\emwin\mytest;..\HARDWARE\LCD;..\HARDWARE\LED;..\HARDWARE\sdio;..\HARDWARE\KEY;..\HARDWARE\TIM;..\MALLOC;..\FATFS\source;..\MALLOC</IncludePath>
+              <IncludePath>..\CORE;..\HALLIB\Inc;..\HALLIB\Inc\Legacy;..\MALLOC;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\emwin\Config;..\emwin\inc;..\emwin\App;..\emwin\mytest;..\HARDWARE\LCD;..\HARDWARE\LED;..\HARDWARE\sdio;..\HARDWARE\KEY;..\HARDWARE\TIM;..\MALLOC;..\FATFS\source;..\MALLOC;..\HARDWARE\SDRAM;..\FATFS\exfuns</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -352,7 +351,7 @@
             <NoWarn>0</NoWarn>
             <uSurpInc>0</uSurpInc>
             <useXO>0</useXO>
-            <ClangAsOpt>4</ClangAsOpt>
+            <uClangAs>0</uClangAs>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
@@ -458,6 +457,11 @@
               <FileType>1</FileType>
               <FilePath>..\HALLIB\Src\stm32f4xx_ll_sdmmc.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_hal_sdram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HALLIB\Src\stm32f4xx_hal_sdram.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -502,6 +506,11 @@
               <FileName>sdio_sdcard.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\sdio\sdio_sdcard.c</FilePath>
+            </File>
+            <File>
+              <FileName>SDRAM.C</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\SDRAM\SDRAM.C</FilePath>
             </File>
           </Files>
         </Group>
@@ -572,6 +581,11 @@
               <FileName>ffunicode.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\FATFS\source\ffunicode.c</FilePath>
+            </File>
+            <File>
+              <FileName>fattester.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FATFS\exfuns\fattester.c</FilePath>
             </File>
           </Files>
         </Group>

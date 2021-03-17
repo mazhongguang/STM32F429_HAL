@@ -9,8 +9,10 @@
 //#define EXTI_H
 #define LCD_H
 //#define REMOTE_H
+#define SDRAM_H
 
 /* Includes ------------------------------------------------------------------*/
+//#include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 
 #include "stdlib.h"

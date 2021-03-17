@@ -5,6 +5,8 @@ FATFS/documents/res/app3.c \
 FATFS/documents/res/app4.c \
 FATFS/documents/res/app5.c \
 FATFS/documents/res/app6.c \
+FATFS/exfuns/exfuns.c \
+FATFS/exfuns/fattester.c \
 FATFS/source/diskio.c \
 FATFS/source/ff.c \
 FATFS/source/ffsystem.c \

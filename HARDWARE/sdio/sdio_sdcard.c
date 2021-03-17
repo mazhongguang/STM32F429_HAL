@@ -36,7 +36,7 @@ uint8_t sd_init(void)
 	SDCARD_Handler.Init.ClockEdge = SDIO_CLOCK_EDGE_RISING;
 	SDCARD_Handler.Init.ClockBypass = SDIO_CLOCK_BYPASS_DISABLE;
 	SDCARD_Handler.Init.ClockPowerSave = SDIO_CLOCK_POWER_SAVE_DISABLE;
-	SDCARD_Handler.Init.ClockDiv = 0;
+	SDCARD_Handler.Init.ClockDiv = SDIO_INIT_CLK_DIV;
 	SDCARD_Handler.Init.BusWide = SDIO_BUS_WIDE_1B;
 	SDCARD_Handler.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_DISABLE;
 	sd_error = HAL_SD_Init(&SDCARD_Handler);
@@ -45,7 +45,7 @@ uint8_t sd_init(void)
 		return 1;
 	}
 
-	if (HAL_SD_ConfigWideBusOperation(&SDCARD_Handler, SDIO_BUS_WIDE_4B) != HAL_OK)
+	if (HAL_SD_ConfigWideBusOperation(&SDCARD_Handler, SDIO_BUS_WIDE_1B) != HAL_OK)
 	{
 		return 2;
 	}
@@ -70,7 +70,7 @@ void HAL_SD_MspInit(SD_HandleTypeDef* hsd)
 		GPIO_Initure.Pin = GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_12;
 		GPIO_Initure.Mode = GPIO_MODE_AF_PP;
 		GPIO_Initure.Pull = GPIO_NOPULL;
-		GPIO_Initure.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+		GPIO_Initure.Speed = GPIO_SPEED_FREQ_LOW;
 		GPIO_Initure.Alternate = GPIO_AF12_SDIO;
 		HAL_GPIO_Init(GPIOC, &GPIO_Initure);
 
@@ -157,7 +157,7 @@ uint8_t sd_writedisk(uint8_t *buf, uint32_t sector, uint32_t cnt)
 	}
 	else
 	{
-		sta = HAL_SD_WriteBlocks(&SDCARD_Handler, sdio_data_buffer, lsector, cnt, timeout);
+		sta = HAL_SD_WriteBlocks(&SDCARD_Handler, buf, lsector, cnt, timeout);
 	}
 
 	while (HAL_SD_GetCardState(&SDCARD_Handler) != HAL_SD_CARD_TRANSFER)

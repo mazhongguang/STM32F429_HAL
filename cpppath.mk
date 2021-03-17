@@ -1,6 +1,7 @@
 C_INCLUDES = \
 -ICORE \
 -Idsp_lib/Include \
+-IFATFS/exfuns \
 -IFATFS/source \
 -IHALLIB/Inc \
 -IHALLIB/Inc/Legacy \
@@ -40,6 +41,8 @@ AS_INCLUDES =
 #'CORE',
 #'-I',
 #'dsp_lib/Include',
+#'-I',
+#'FATFS/exfuns',
 #'-I',
 #'FATFS/source',
 #'-I',

@@ -28,10 +28,11 @@ DSTATUS disk_status (
 	BYTE pdrv		/* Physical drive nmuber to identify the drive */
 )
 {
-	DSTATUS stat;
+	DSTATUS stat = FR_OK;
 	int result;
 
 	switch (pdrv) {
+#if 0
 	case DEV_RAM :
 		/*result = RAM_disk_status();*/
 
@@ -52,6 +53,7 @@ DSTATUS disk_status (
 		// translate the reslut code here
 
 		return stat;
+#endif
 	case SD_CARD:
 		result = 0;
 		return stat;
@@ -69,10 +71,11 @@ DSTATUS disk_initialize (
 	BYTE pdrv				/* Physical drive nmuber to identify the drive */
 )
 {
-	DSTATUS stat;
+	DSTATUS stat = FR_OK;
 	int result;
 
 	switch (pdrv) {
+#if 0
 	case DEV_RAM :
 		/*result = RAM_disk_initialize();*/
 
@@ -93,6 +96,7 @@ DSTATUS disk_initialize (
 		// translate the reslut code here
 
 		return stat;
+#endif
 	case SD_CARD:
 		result = sd_init();
 		return result;
@@ -122,6 +126,7 @@ DRESULT disk_read (
 	}
 
 	switch (pdrv) {
+#if 0
 	case DEV_RAM :
 		// translate the arguments here
 
@@ -148,9 +153,9 @@ DRESULT disk_read (
 		// translate the reslut code here
 
 		return res;
-		
+#endif	
 	case SD_CARD:
-		res  = sd_readdisk(buff, sector, count);
+			res  = sd_readdisk(buff, sector, count);
 		while (res != 0)
 		{
 			sd_init();
@@ -186,6 +191,7 @@ DRESULT disk_write (
 	}
 
 	switch (pdrv) {
+#if 0
 	case DEV_RAM :
 		// translate the arguments here
 
@@ -212,7 +218,7 @@ DRESULT disk_write (
 		// translate the reslut code here
 
 		return res;
-		
+#endif	
 	case SD_CARD:
 		res = sd_writedisk((uint8_t *)buff, sector, count);
 		while (res != 0)
@@ -243,6 +249,7 @@ DRESULT disk_ioctl (
 	int result;
 
 	switch (pdrv) {
+#if 0
 	case DEV_RAM :
 
 		// Process of the command for the RAM drive
@@ -260,7 +267,7 @@ DRESULT disk_ioctl (
 		// Process of the command the USB drive
 
 		return res;
-
+#endif
 	case SD_CARD:
 		switch (cmd)
 		{
